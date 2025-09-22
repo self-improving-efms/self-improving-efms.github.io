@@ -4,16 +4,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=https://sites.google.com/view/mfa-self-improvement/home">
-    <title>Self-Improving EFMs - Redirecting...</title>
-    <script type="text/javascript">
-        window.location.href = "https://sites.google.com/view/mfa-self-improvement/home";
+    <title>Self-Improving Embodied Foundation Models</title>
+    <meta name="description"
+        content="Two-stage post-training (SFT + Self-Improvement) for embodied foundation models using steps-to-go for reward shaping and success detection.">
+    <link rel="stylesheet" href="/assets/css/main.css">
+
+    <meta property="og:title" content="Self-Improving Embodied Foundation Models">
+    <meta property="og:description" content="SFT + Self-Improvement enables autonomous skill acquisition in robotics.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://self-improving-efms.github.io/">
+    <meta property="og:image" content="https://self-improving-efms.github.io/assets/final_arxiv_method_figure.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Self-Improving Embodied Foundation Models">
+    <meta name="twitter:description"
+        content="Two-stage post-training (SFT + Self-Improvement) for embodied foundation models.">
+    <meta name="twitter:image" content="https://self-improving-efms.github.io/assets/final_arxiv_method_figure.png">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "Self-Improving Embodied Foundation Models",
+        "author": [
+            {"@type": "Person", "name": "Seyed Kamyar Seyed Ghasemipour"},
+            {"@type": "Person", "name": "Ayzaan Wahid"},
+            {"@type": "Person", "name": "Jonathan Tompson"},
+            {"@type": "Person", "name": "Pannag Sanketi"},
+            {"@type": "Person", "name": "Igor Mordatch"}
+        ],
+        "url": "https://self-improving-efms.github.io/",
+        "sameAs": "https://arxiv.org/pdf/2509.15155",
+        "publisher": {"@type": "Organization", "name": "NeurIPS (2025)"}
+    }
     </script>
 </head>
 
 <body>
-    <p>Redirecting to <a href="https://sites.google.com/view/mfa-self-improvement/home">Self-Improving EFMs</a>...</p>
-    <p>If you are not redirected automatically, please click the link above.</p>
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <div class="brand"><span>Self-Improving EFMs</span><span class="dot">•</span></div>
+                <nav class="nav-links">
+                    <a href="#overview">Overview</a>
+                    <a href="#intuition">Intuition</a>
+                    <a href="#method">Method</a>
+                    <a href="#results">Results</a>
+                    <a href="#videos">Videos</a>
+                    <a href="#infrastructure">Infrastructure</a>
+                    <a href="#paper">Paper &amp; BibTeX</a>
+                    <a href="#team">Team</a>
+                    <a href="#faq">FAQ</a>
+                </nav>
+                <button class="nav-toggle" aria-label="Toggle navigation">Menu</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="container">
+                <h1>Self-Improving Embodied Foundation Models</h1>
+                <p>Two-stage post-training for robotics: Supervised Fine-Tuning (behavioral cloning + steps-to-go
+                    prediction) followed by Self-Improvement via online RL with shaped rewards and robust success
+                    detection.</p>
+                <div class="ctas">
+                    <a class="btn btn-primary" href="https://arxiv.org/pdf/2509.15155" target="_blank"
+                        rel="noopener">Read the Paper</a>
+                    <a class="btn btn-secondary" href="https://sites.google.com/view/mfa-self-improvement/home"
+                        target="_blank" rel="noopener">Supplementary</a>
+                </div>
+                <div class="hero-figure figure">
+                    <img src="/assets/final_arxiv_method_figure.png"
+                        alt="Method overview: SFT (BC + steps-to-go) followed by Self-Improvement with reward shaping and success detection">
+                    <div class="figcaption">Source: Figure 1 in <a href="https://arxiv.org/pdf/2509.15155"
+                            target="_blank" rel="noopener">paper</a>.</div>
+                </div>
+                <div class="card" id="abstract">
+                    <div class="kicker">Abstract</div>
+                    <p>Foundation models trained on web-scale data have revolutionized robotics, but their application
+                        to low-level control remains largely limited to behavioral cloning. Drawing inspiration from the
+                        success of the reinforcement learning stage in fine-tuning large language models, we propose a
+                        two-stage post-training approach for robotics. The first stage, Supervised Fine-Tuning (SFT),
+                        fine-tunes pretrained foundation models using both: a) behavioral cloning, and b) steps-to-go
+                        prediction objectives. In the second stage, Self-Improvement, steps-to-go prediction enables the
+                        extraction of a well-shaped reward function and a robust success detector, enabling a fleet of
+                        robots to autonomously practice downstream tasks with minimal human supervision. Through
+                        extensive experiments on real-world and simulated robot embodiments, our novel post-training
+                        recipe unveils significant results on Embodied Foundation Models. First, we demonstrate that the
+                        combination of SFT and Self-Improvement is significantly more sample-efficient than scaling
+                        imitation data collection for supervised learning, and that it leads to policies with
+                        significantly higher success rates. Further ablations highlight that the combination of
+                        web-scale pretraining and Self-Improvement is the key to this sample-efficiency. Next, we
+                        demonstrate that our proposed combination uniquely unlocks a capability that current methods
+                        cannot achieve: autonomously practicing and acquiring novel skills that generalize far beyond
+                        the behaviors observed in the imitation learning datasets used during training. These findings
+                        highlight the transformative potential of combining pretrained foundation models with online
+                        Self-Improvement to enable autonomous skill acquisition in robotics.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="overview">
+            <div class="container">
+                <div class="kicker">Overview</div>
+                <h2>Method — Two-stage post-training</h2>
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Stage 1 — Supervised Fine-Tuning (SFT)</h3>
+                        <p class="justify">Fine-tune an Embodied Foundation Model (EFM) initialized from a web-scale
+                            pretrained
+                            multimodal foundation model with two objectives:</p>
+                        <p class="small eq-muted"><strong>Behavioral Cloning (BC) loss.</strong>
+                            \[\mathcal{L}_{\mathrm{BC}}(\mathrm{EFM})\;=\;
+                            -\,\mathbb{E}_{(o_t,a_t,g_{t'})\sim\mathcal{D}}\,\Big[\,\log
+                            p^{\mathrm{EFM}}_{\mathrm{action}}(a_t\mid o_t, g_{t'})\,\Big]\]
+                        </p>
+                        <p class="small eq-muted"><strong>Steps-to-go loss.</strong>
+                            \[\mathcal{L}_{\mathrm{steps\text{-}to\text{-}go}}(\mathrm{EFM})\;=\;
+                            -\,\mathbb{E}_{(o_t,a_t,g_{t'})\sim\mathcal{D}}\,\Big[\,\log
+                            p^{\mathrm{EFM}}_{\mathrm{steps\text{-}to\text{-}go}}(\,t' - t\mid o_t, g_{t'}\,)\,\Big]\]
+                        </p>
+                    </div>
+                    <div>
+                        <h3>Stage 2 — Self-Improvement (Online RL)</h3>
+                        <p class="justify">Self-predicted rewards and success detector enable robots to autonomously
+                            practice downstream tasks and improve online with minimal supervision.</p>
+                        <p class="small eq-muted">
+                            \[
+                            d(o,g)\;:=\;\mathbb{E}_{\;p^{\mathrm{EFM}}_{\mathrm{steps\text{-}to\text{-}go}}(\,\text{steps-to-go}\mid
+                            o,g\,)}\big[\,\text{steps-to-go}\,\big] \]
+                        </p>
+                        <p class="small eq-muted"><strong>Reward function.</strong> \[ r(o_t, a_t, o_{t+1}, g) = d(o_t,
+                            g) -
+                            d(o_{t+1}, g) \]</p>
+                        <p class="small eq-muted"><strong>Success detector.</strong> \[ \mathrm{success}(o, g) =
+                            \mathbb{1}[\,
+                            d(o, g) \le s \,] \]</p>
+                    </div>
+                </div>
+                <p class="small">This eliminates manual reward engineering and, combined with web-scale pretraining,
+                    enables <strong>behavioral generalization</strong> beyond imitation data.</p>
+
+                <h2 style="margin-top:28px;">Key results</h2>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="metric"><span>45% → 75%</span></div>
+                        <div class="small">LanguageTable with ~10% additional robot time (Self-Improvement)</div>
+                    </div>
+                    <div class="card">
+                        <div class="metric"><span>45% → 60%</span></div>
+                        <div class="small">Scaling imitation data 8× (BC-only baseline)</div>
+                    </div>
+                    <div class="card">
+                        <div class="metric"><span>OOD skills</span></div>
+                        <div class="small">Autonomous practice acquires behaviors beyond imitation datasets</div>
+                    </div>
+                </div>
+                <div class="takeaways">
+                    <div class="takeaway"><span class="label">A1</span> Self-Improvement significantly improves policy
+                        performance beyond the supervised learning stage.</div>
+                    <div class="takeaway"><span class="label">A2</span> The combination of supervised learning +
+                        Self-Improvement is much more sample-efficient than supervised learning alone.</div>
+                    <div class="takeaway"><span class="label">A3</span> Self-Improvement is robust and effective for
+                        real-world robot learning.</div>
+                    <div class="takeaway"><span class="label">A4</span> Multimodal pretraining leads to significantly
+                        better Self-Improved policies and is a key enabler of sample-efficiency.</div>
+                    <div class="takeaway"><span class="label">A5</span> Online Self-Improvement + web-scale pretraining
+                        enables policies to rapidly acquire new skills that generalize far beyond imitation datasets.
+                    </div>
+                </div>
+                <div class="small muted" style="margin-top:8px;">See green-box key takeaways in the <a
+                        href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.</div>
+            </div>
+        </section>
+
+        <section id="intuition">
+            <div class="container">
+                <div class="kicker">Intuition</div>
+                <h2>Visual, Mathematical, and Pointmass Intuition</h2>
+
+                <h3>Visual intuition</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — contours of steps-to-go d(o, g) over state space
+                            </div>
+                            <div class="figcaption">Visualizing d(o, g) as a potential; difference across steps shapes
+                                reward. Source: <a href="https://arxiv.org/pdf/2509.15155" target="_blank"
+                                    rel="noopener">paper</a>.</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p>Steps-to-go acts like a progress signal. As the agent approaches the goal, its predicted
+                            steps-to-go decreases, creating a dense feedback signal from sparse success.</p>
+                        <p>The loop is: predict d → act → relabel with d → learn. This enables stable self-practice with
+                            minimal human oversight.</p>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — predict → act → relabel → learn loop</div>
+                            <div class="figcaption">Self-improvement loop. Source: <a
+                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Mathematical intuition</h3>
+                <p>Reward function and success detector from steps-to-go d(o, g):</p>
+                <p class="small eq-muted">\[ r(o_t, a_t, o_{t+1}, g) = d(o_t, g) - d(o_{t+1}, g) \]</p>
+                <p class="small eq-muted">\[ \\mathrm{success}(o, g) = \\mathbb{1}\\,[\\, d(o, g) \\le s \\,] \]</p>
+                <p>This encourages monotonic decrease in d and provides a principled termination condition.</p>
+
+                <h3>Pointmass experiments</h3>
+                <div class="grid grid-2">
+                    <div>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — pointmass environment schematic</div>
+                            <div class="figcaption">Toy setup illustrating faster learning under shaped rewards.</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p>We use a simple pointmass domain to illustrate how shaping with d accelerates learning and
+                            improves stability. Ablations show the role of web-scale pretraining and steps-to-go
+                            signals.</p>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — learning curves and ablations</div>
+                            <div class="figcaption">Learning curves with/without shaping; pretraining ablations. See <a
+                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="method">
+            <div class="container">
+                <div class="kicker">Method</div>
+                <h2>Two-stage post-training</h2>
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Stage 1 — Supervised Fine-Tuning (SFT)</h3>
+                        <p>Initialize an EFM from a pretrained multimodal model and fine-tune with: (a) behavioral
+                            cloning, and (b) predicting steps-to-go to future goals/events within trajectories.</p>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — SFT objectives and data</div>
+                            <div class="figcaption">BC + steps-to-go objectives. Source: <a
+                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Stage 2 — Self-Improvement (Online RL)</h3>
+                        <p>Use steps-to-go predictions to compute shaped rewards and detect success while a fleet of
+                            robots practices tasks with minimal supervision. Policies rapidly improve online.</p>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — Self-Improvement pipeline</div>
+                            <div class="figcaption">Compute rewards from d and detect success. Source: <a
+                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results">
+            <div class="container">
+                <div class="kicker">Results</div>
+                <h2>Higher success and sample efficiency</h2>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="metric"><span>45% → 75%</span></div>
+                        <div class="small">LanguageTable with ~10% extra robot time (Self-Improvement)</div>
+                    </div>
+                    <div class="card">
+                        <div class="metric"><span>45% → 60%</span></div>
+                        <div class="small">Scaling imitation data 8× (BC-only)</div>
+                    </div>
+                    <div class="card">
+                        <div class="metric"><span>OOD skills</span></div>
+                        <div class="small">Acquire behaviors beyond imitation datasets</div>
+                    </div>
+                </div>
+                <div class="figure">
+                    <div class="img-placeholder">Placeholder — LanguageTable success curves</div>
+                    <div class="figcaption">Success curves highlighting Self-Improvement gains. See <a
+                            href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.</div>
+                </div>
+                <div class="figure">
+                    <div class="img-placeholder">Placeholder — Aloha sim/real highlights</div>
+                    <div class="figcaption">Results on Aloha embodiments. See <a href="https://arxiv.org/pdf/2509.15155"
+                            target="_blank" rel="noopener">paper</a>.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="videos">
+            <div class="container">
+                <div class="kicker">Videos</div>
+                <h2>Demos</h2>
+                <div class="grid grid-3 video-grid">
+                    <div class="video-tile" data-video="https://sites.google.com/view/mfa-self-improvement/home">
+                        <div class="video-thumb">Thumbnail — add /assets/thumbnails/video_languagetable.jpg</div>
+                        <div class="video-body">
+                            <div class="video-title">LanguageTable demos</div>
+                            <div class="small">Self-improvement increases success</div>
+                        </div>
+                    </div>
+                    <div class="video-tile" data-video="https://sites.google.com/view/mfa-self-improvement/home">
+                        <div class="video-thumb">Thumbnail — add /assets/thumbnails/video_aloha.jpg</div>
+                        <div class="video-body">
+                            <div class="video-title">Aloha (sim/real)</div>
+                            <div class="small">Insertion and manipulation tasks</div>
+                        </div>
+                    </div>
+                    <div class="video-tile" data-video="https://sites.google.com/view/mfa-self-improvement/home">
+                        <div class="video-thumb">Thumbnail — add /assets/thumbnails/video_generalization.jpg</div>
+                        <div class="video-body">
+                            <div class="video-title">OOD skills</div>
+                            <div class="small">Autonomous skill acquisition beyond BC</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="infrastructure">
+            <div class="container">
+                <div class="kicker">Infrastructure</div>
+                <h2>Two variants for online Self-Improvement</h2>
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Version 1: Non-Local Policy</h3>
+                        <p>Distributed architecture with remote action inference. TPUs alternate between inference and
+                            learning; steps-to-go served by separate inference nodes. Suitable up to ~5 Hz control.</p>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — Infra v1 diagram</div>
+                            <div class="figcaption">Appendix J.1 in <a href="https://arxiv.org/pdf/2509.15155"
+                                    target="_blank" rel="noopener">paper</a>.</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Version 2: Local Policy</h3>
+                        <p>Action inference runs locally on actor machines; learners dedicated to training. Reduces
+                            latency for higher-rate control (e.g., 10 Hz on Aloha).</p>
+                        <div class="figure">
+                            <div class="img-placeholder">Placeholder — Infra v2 diagram</div>
+                            <div class="figcaption">Appendix J.2 in <a href="https://arxiv.org/pdf/2509.15155"
+                                    target="_blank" rel="noopener">paper</a>.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="paper">
+            <div class="container">
+                <div class="kicker">Paper &amp; BibTeX</div>
+                <h2>Resources</h2>
+                <div class="ctas">
+                    <a class="btn btn-primary" href="https://arxiv.org/pdf/2509.15155" target="_blank"
+                        rel="noopener">PDF</a>
+                    <a class="btn btn-secondary" href="https://arxiv.org/abs/2509.15155" target="_blank"
+                        rel="noopener">arXiv</a>
+                    <button class="btn" id="copyBibtex">Copy BibTeX</button>
+                </div>
+                <div class="code-actions small">Cite as</div>
+                <pre id="bibtex">@inproceedings{self_improving_efms_2025,
+  title={Self-Improving Embodied Foundation Models},
+  author={Seyed Ghasemipour, Seyed Kamyar and Wahid, Ayzaan and Tompson, Jonathan and Sanketi, Pannag and Mordatch, Igor},
+  booktitle={NeurIPS},
+  year={2025},
+  note={Appearing in NeurIPS 2025},
+  url={https://arxiv.org/abs/2509.15155}
+}</pre>
+            </div>
+        </section>
+
+        <section id="team">
+            <div class="container">
+                <div class="kicker">Team</div>
+                <h2>Authors</h2>
+                <p>Seyed Kamyar Seyed Ghasemipour (Generalist), Ayzaan Wahid, Jonathan Tompson, Pannag Sanketi, Igor
+                    Mordatch (Google DeepMind)</p>
+                <p class="small">Contact: <a href="mailto:kamyar@generalistai.com">kamyar@generalistai.com</a></p>
+                <p class="small">Equal supervision noted in the paper.</p>
+            </div>
+        </section>
+
+        <section id="faq">
+            <div class="container">
+                <div class="kicker">FAQ</div>
+                <h2>Common questions</h2>
+                <p><strong>What is steps-to-go?</strong> A model prediction of remaining steps to reach a goal. Its
+                    decrease across time forms a dense progress signal.</p>
+                <p><strong>How are rewards computed?</strong> By differences in steps-to-go: r = d(o, g) − d(o′, g).</p>
+                <p><strong>How is success detected?</strong> When d(o, g) ≤ s, providing a principled termination
+                    signal.</p>
+                <p><strong>Why not just use more imitation data?</strong> Shaped signals and online practice deliver
+                    larger gains with less data collection.</p>
+                <p><strong>Which embodiments?</strong> LanguageTable and Aloha, in simulation and real-world.</p>
+                <p><strong>Limitations?</strong> Mis-calibrated d and latency constraints; addressed via thresholds,
+                    filtering, and local inference (Infra v2).</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="videoModal" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>Demo</div>
+                <button class="modal-close" id="modalClose">Close</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="modalFrame" src="" style="width:100%;height:100%;border:0;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="small">© <span id="year"></span> Self-Improving EFMs. Cites: <a
+                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>, <a
+                    href="https://sites.google.com/view/mfa-self-improvement/home" target="_blank"
+                    rel="noopener">supplementary</a>.</div>
+        </div>
+    </footer>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\[', right: '\\]', display: true}, {left: '\\(', right: '\\)', display: false}]});"></script>
+    <script src="/assets/js/main.js"></script>
 </body>
 
 </html>
