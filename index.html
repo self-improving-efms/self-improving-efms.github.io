@@ -109,7 +109,7 @@
         <section id="overview">
             <div class="container">
                 <div class="kicker">Overview</div>
-                <h2>Method — Two-stage post-training</h2>
+                <h2 id="method">Method — Two-stage post-training</h2>
                 <div class="grid grid-2">
                     <div>
                         <h3>Stage 1 — Supervised Fine-Tuning (SFT)</h3>
@@ -147,7 +147,7 @@
                 <p class="small">This eliminates manual reward engineering and, combined with web-scale pretraining,
                     enables <strong>behavioral generalization</strong> beyond imitation data.</p>
 
-                <h2 style="margin-top:28px;">Key results</h2>
+                <h2 id="results" style="margin-top:28px;">Key results</h2>
                 <div class="figure figure-white">
                     <img src="/assets/stage_2_delta.png" alt="Self-Improvement Stage 2 delta overview" />
                     <div class="figcaption">Stage 2 Self-Improvement deltas.</div>
@@ -159,72 +159,94 @@
                             beyond the supervised learning stage.</p>
                         <p style="margin-top:6px;"><span class="label">KR2</span> The combination of supervised learning
                             + Self-Improvement is much more sample-efficient than supervised learning alone.</p>
-                    </div>
-                </div>
-
-                <div class="compare-row" style="margin-top:12px;">
-                    <div class="card" style="flex:1;">
-                        <div class="compare-title si">Online Self-Improvement w/ 10% additional episodes</div>
-                        <div class="metric"><span>45% → 75%</span></div>
-                        <div class="small">Simulated LanguageTable</div>
-                    </div>
-                    <div class="vs-box">vs.</div>
-                    <div class="card" style="flex:1;">
-                        <div class="compare-title bc">Supervised Fine-Tuning w/ 8x imitation data</div>
-                        <div class="metric"><span>45% → 60%</span></div>
-                        <div class="small"></div>
-                    </div>
-                </div>
-
-                <div class="takeaways" style="margin-top:16px;">
-                    <div class="takeaway"><span class="label">KR3</span> Self-Improvement is robust and effective for
-                        real-world robot learning.</div>
-                </div>
-
-                <div class="compare-row" style="margin-top:12px;">
-                    <div class="card" style="flex:1;">
-                        <div class="compare-title si">Online Self-Improvement w/ 15% additional episodes</div>
-                        <div class="metric"><span>63% → 87.5%</span></div>
-                        <div class="small">Real-World LanguageTable</div>
-                    </div>
-                    <div class="vs-box">vs.</div>
-                    <div class="card" style="flex:1;">
-                        <div class="compare-title bc">Supervised Fine-Tuning w/ 4x imitation data</div>
-                        <div class="metric"><span>63% → 62%</span></div>
-                        <div class="small"></div>
+                        <div class="compare-row">
+                            <div class="card" style="flex:1;">
+                                <div class="compare-title si">Online Self-Improvement w/ 10% additional episodes</div>
+                                <div class="metric"><span>45% → 75%</span></div>
+                                <div class="small">Simulated LanguageTable</div>
+                            </div>
+                            <div class="vs-box">vs.</div>
+                            <div class="card" style="flex:1;">
+                                <div class="compare-title bc">Supervised Fine-Tuning w/ 8x imitation data</div>
+                                <div class="metric"><span>45% → 60%</span></div>
+                                <div class="small"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="takeaways" style="margin-top:16px;">
-                    <div class="takeaway"><span class="label">KR4</span> Online Self-Improvement + web-scale pretraining
-                        enables policies to rapidly acquire new skills that generalize far beyond imitation datasets.
-                    </div>
-                </div>
-                <div class="grid grid-2" style="margin-top:12px;">
-                    <div class="card">
-                        <div class="small"><strong>Real2Sim</strong></div>
-                        <p class="small muted" style="margin-top:6px;">Generalization across embodiment/domain with
-                            self-practice.</p>
-                    </div>
-                    <div class="card">
-                        <div class="small"><strong>Strong Generalisation</strong></div>
-                        <p class="small muted" style="margin-top:6px;">Acquiring OOD skills beyond imitation datasets.
-                        </p>
+                    <div class="takeaway">
+                        <p><span class="label">KR3</span> Self-Improvement is robust and effective for real-world robot
+                            learning.</p>
+                        <div class="compare-row">
+                            <div class="card" style="flex:1;">
+                                <div class="compare-title si">Online Self-Improvement w/ 15% additional episodes</div>
+                                <div class="metric"><span>63% → 87.5%</span></div>
+                                <div class="small">Real-World LanguageTable</div>
+                            </div>
+                            <div class="vs-box">vs.</div>
+                            <div class="card" style="flex:1;">
+                                <div class="compare-title bc">Supervised Fine-Tuning w/ 4x imitation data</div>
+                                <div class="metric"><span>63% → 62%</span></div>
+                                <div class="small"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="takeaways" style="margin-top:16px;">
-                    <div class="takeaway"><span class="label">KR5</span> Multimodal pretraining is a key enabler of
-                        sample-efficiency and stronger Self-Improved policies.</div>
-                </div>
-                <div class="grid grid-2" style="margin-top:12px;">
-                    <div class="figure figure-white"><img src="/assets/ablation_unipali.png"
-                            alt="Ablation: unimodal vs multimodal" />
-                        <div class="figcaption">Ablation: effect of multimodal pretraining.</div>
+                    <div class="takeaway">
+                        <p><span class="label">KR4</span> Online Self-Improvement + web-scale pretraining enables
+                            policies to rapidly acquire new skills that generalize far beyond imitation datasets.</p>
+                        <div class="grid grid-2" style="margin-top:12px;">
+                            <div class="card">
+                                <div class="blue-title">Real2Sim</div>
+                                <p class="small muted" style="margin-top:6px;">Generalization across embodiment/domain
+                                    with self-practice.</p>
+                                <div class="figure figure-white" style="margin-top:8px;">
+                                    <img src="/assets/real2sim.001.png" alt="Real2Sim environments" />
+                                    <div class="figcaption">Real2Sim evaluation environments.</div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="blue-title">Strong Generalisation</div>
+                                <p class="small muted" style="margin-top:6px;">Acquiring OOD skills beyond imitation
+                                    datasets.</p>
+                                <div class="figure figure-white" style="margin-top:8px;">
+                                    <img src="/assets/bananatable_envs/bananatable_envs.001.png"
+                                        alt="BananaTable environments" />
+                                    <div class="figcaption">Strong Generalisation: BananaTable environments.</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="figure figure-white"><img src="/assets/real2sim_plot.png"
-                            alt="Real2Sim performance plot" />
-                        <div class="figcaption">Real2Sim performance.</div>
+                </div>
+
+                <div class="takeaways" style="margin-top:16px;">
+                    <div class="takeaway">
+                        <p><span class="label">KR5</span> Multimodal pretraining is a key enabler of sample-efficiency
+                            and stronger Self-Improved policies.</p>
+                        <p class="small" style="margin-top:12px;">We evaluate alternative reward-model variants; results
+                            demonstrate the significant value of web-scale multimodal pretraining.</p>
+                        <ul class="small" style="margin-top:6px; padding-left: 18px;">
+                            <li><strong>PaLI / PaLI-X</strong>: pretrained multimodal foundation models (<a
+                                    href="https://arxiv.org/abs/2305.18565" target="_blank" rel="noopener">arXiv</a>).
+                            </li>
+                            <li><strong>Uni-PaLI</strong>: vision and language components trained unimodally,
+                                separately.</li>
+                            <li><strong>Scratch</strong>: no pretraining, same architecture.</li>
+                        </ul>
+                        <div class="grid grid-2" style="margin-top:12px;">
+                            <div class="figure figure-white"><img src="/assets/ablation_unipali.png"
+                                    alt="Ablation: unimodal vs multimodal" />
+                                <div class="figcaption">Ablation: effect of multimodal pretraining.</div>
+                            </div>
+                            <div class="figure figure-white"><img src="/assets/real2sim_plot.png"
+                                    alt="Real2Sim performance plot" />
+                                <div class="figcaption">Real2Sim performance.</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -289,67 +311,9 @@
             </div>
         </section>
 
-        <section id="method">
-            <div class="container">
-                <div class="kicker">Method</div>
-                <h2>Two-stage post-training</h2>
-                <div class="grid grid-2">
-                    <div>
-                        <h3>Stage 1 — Supervised Fine-Tuning (SFT)</h3>
-                        <p>Initialize an EFM from a pretrained multimodal model and fine-tune with: (a) behavioral
-                            cloning, and (b) predicting steps-to-go to future goals/events within trajectories.</p>
-                        <div class="figure">
-                            <div class="img-placeholder">Placeholder — SFT objectives and data</div>
-                            <div class="figcaption">BC + steps-to-go objectives. Source: <a
-                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h3>Stage 2 — Self-Improvement (Online RL)</h3>
-                        <p>Use steps-to-go predictions to compute shaped rewards and detect success while a fleet of
-                            robots practices tasks with minimal supervision. Policies rapidly improve online.</p>
-                        <div class="figure">
-                            <div class="img-placeholder">Placeholder — Self-Improvement pipeline</div>
-                            <div class="figcaption">Compute rewards from d and detect success. Source: <a
-                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <section id="results">
-            <div class="container">
-                <div class="kicker">Results</div>
-                <h2>Higher success and sample efficiency</h2>
-                <div class="grid grid-3">
-                    <div class="card">
-                        <div class="metric"><span>45% → 75%</span></div>
-                        <div class="small">LanguageTable with ~10% extra robot time (Self-Improvement)</div>
-                    </div>
-                    <div class="card">
-                        <div class="metric"><span>45% → 60%</span></div>
-                        <div class="small">Scaling imitation data 8× (BC-only)</div>
-                    </div>
-                    <div class="card">
-                        <div class="metric"><span>OOD skills</span></div>
-                        <div class="small">Acquire behaviors beyond imitation datasets</div>
-                    </div>
-                </div>
-                <div class="figure">
-                    <div class="img-placeholder">Placeholder — LanguageTable success curves</div>
-                    <div class="figcaption">Success curves highlighting Self-Improvement gains. See <a
-                            href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.</div>
-                </div>
-                <div class="figure">
-                    <div class="img-placeholder">Placeholder — Aloha sim/real highlights</div>
-                    <div class="figcaption">Results on Aloha embodiments. See <a href="https://arxiv.org/pdf/2509.15155"
-                            target="_blank" rel="noopener">paper</a>.</div>
-                </div>
-            </div>
-        </section>
+
+
 
         <section id="videos">
             <div class="container">

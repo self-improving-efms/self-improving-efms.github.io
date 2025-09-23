@@ -504,6 +504,14 @@ pre {
     border-radius: 8px;
 }
 
+/* Scale figures inside takeaways to 2/3 size */
+.takeaway .figure img {
+    width: 66%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+}
+
 /* Comparison row with VS in the middle */
 .compare-row {
     display: flex;
@@ -539,6 +547,24 @@ pre {
 
 .compare-title.bc {
     color: var(--accent);
+}
+
+/* Compare row inside a green takeaway */
+.takeaway .compare-row {
+    margin-top: 10px;
+}
+
+.takeaway .card {
+    background: rgba(15, 19, 26, 0.6);
+}
+
+/* Accent blue card titles */
+.blue-title {
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+    margin-bottom: 6px;
 }
 
 @media (prefers-color-scheme: light) {
