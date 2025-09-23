@@ -421,6 +421,12 @@ pre {
     margin: 10px 0;
 }
 
+.callout.justify {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+}
+
 .badge {
     display: inline-block;
     background: #0f131a;

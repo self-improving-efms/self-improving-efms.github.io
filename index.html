@@ -258,27 +258,48 @@
                 <h2>Visual, Mathematical, and Pointmass Intuition</h2>
 
                 <h3>Visual intuition</h3>
-                <div class="grid grid-2">
-                    <div>
-                        <div class="figure">
-                            <div class="img-placeholder">Placeholder — contours of steps-to-go d(o, g) over state space
-                            </div>
-                            <div class="figcaption">Visualizing d(o, g) as a potential; difference across steps shapes
-                                reward. Source: <a href="https://arxiv.org/pdf/2509.15155" target="_blank"
-                                    rel="noopener">paper</a>.</div>
-                        </div>
+                <div class="callout justify" style="margin-bottom:12px;">
+                    We formulate steps-to-go prediction as a <strong>discrete prediction</strong> task. The first two
+                    figures visualize the model's predicted distribution over steps-to-go at interesting
+                    moments during Aloha Single Insertion. The third figure plots the expectation
+                    \( \mathbb{E}[\text{steps-to-go}] \) over time for a full episode. All figures are from the
+                    <strong>Aloha Single Insertion</strong> task.
+                </div>
+                <div>
+                    <div class="figure figure-white">
+                        <img src="/assets/final_let_go_early.png" alt="" />
+                        <div class="figcaption">In the first frame, the policy is about to successfully insert the peg
+                            and complete the task, so the model predicts that with high likelihood the policy will
+                            succeed soon. However, in the next frame the policy lets go of the peg too soon and the peg
+                            is about to fall. Thus the predicted steps-to-go widens drastically into a multimodal
+                            distribution, considering the spectrum of possibilities from a quick recovery to longer
+                            recovery times. As the policy recovers in the fourth and fifth frames, the model's
+                            prediction narrows back to a unimodal distribution, with high likelihood of success in the
+                            near horizon.</div>
                     </div>
-                    <div>
-                        <p>Steps-to-go acts like a progress signal. As the agent approaches the goal, its predicted
-                            steps-to-go decreases, creating a dense feedback signal from sparse success.</p>
-                        <p>The loop is: predict d → act → relabel with d → learn. This enables stable self-practice with
-                            minimal human oversight.</p>
-                        <div class="figure">
-                            <div class="img-placeholder">Placeholder — predict → act → relabel → learn loop</div>
-                            <div class="figcaption">Self-improvement loop. Source: <a
-                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
-                            </div>
-                        </div>
+                    <div class="figure figure-white">
+                        <img src="/assets/final_socket_slip.png" alt="" />
+                        <div class="figcaption">In the first two frames the policy is on track to successfully complete
+                            the task, so the model predicts that with high likelihood the policy will succeed soon.
+                            However, in the third frame the socket begins to slip out of the left gripper. Despite this
+                            slippage being barely visible from the left wrist camera, and not visible in any of the
+                            other camera views, the model immediately picks up on this event and its predictions widen
+                            significantly with multiple modes. Specifically, the model places some probability mass on
+                            an immediate save, and distributes the rest of the probability mass over a range of possible
+                            recovery times. In the fourth and fifth frames the socket fully slips out of the gripper, so
+                            the model removes the probability mass on the immediate save outcome.</div>
+                    </div>
+                    <div class="figure figure-white">
+                        <img src="/assets/aloha_episode.png" alt="" />
+                        <div class="figcaption">An example trajectory from the Aloha Single Insertion Task and a plot
+                            representing \( \mathbb{E}[\text{steps-to-go}] \) under the model's prediction (i.e., \(
+                            d(o, g) \)). Key moments: 1) Model believes the episode is about to complete successfully,
+                            2) Policy accidentally drops the peg and \( d(o, g) \) increases, 3) Policy regrasps the peg
+                            from a bad angle not suitable for insertion so \( d(o, g) \) remains high, 4) Policy drops
+                            the peg, providing an opportunity to regrasp correctly which reduces \( d(o, g) \), 5)
+                            Policy is pushing the peg inside and \( d(o, g) \) marks that the policy is about to
+                            succeed, 6) The right hand knocks the socket out of the left hand's grip which increases \(
+                            d(o, g) \).</div>
                     </div>
                 </div>
 
