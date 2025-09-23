@@ -206,6 +206,7 @@ hr {
     padding: 10px 14px;
     border: 1px solid var(--border);
     text-decoration: none;
+    font-weight: 700;
 }
 
 .btn:hover {
@@ -221,6 +222,14 @@ hr {
 .btn-secondary {
     background: #0f131a;
     color: var(--text);
+}
+
+.btn .icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 6px;
+    border-radius: 4px;
 }
 
 .hero-figure {

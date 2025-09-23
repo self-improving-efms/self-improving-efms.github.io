@@ -331,23 +331,53 @@
                     use to use REINFORCE for policy improvement.</p>
 
                 <h3>Pointmass experiments</h3>
-                <div class="grid grid-2">
-                    <div>
-                        <div class="figure">
-                            <div class="img-placeholder">Placeholder — pointmass environment schematic</div>
-                            <div class="figcaption">Toy setup illustrating faster learning under shaped rewards.</div>
+                <div>
+                    <p>
+                        We provide a self-contained Colab notebook that demonstrates Self-Improvement on a pointmass
+                        navigation domain. Each episode starts from a random position and aims for a randomly sampled
+                        goal. We intentionally construct a sub-optimal imitation dataset by using a PD-controller that
+                        visits five intermediate waypoints before heading to the goal. We then fine-tune an MLP policy
+                        and a steps-to-go prediction model with our two-stage recipe. As expected, Stage 1 BC mimics
+                        the dataset’s sub-optimalities, while Stage 2 Self-Improvement (without ground-truth rewards)
+                        quickly drives policies close to optimal. The figure below shows sample trajectories from the
+                        dataset, BC (Stage 1), and Self-Improved (Stage 2). The videos below show the Stage 1 and Stage
+                        2
+                        policies.
+                    </p>
+                    <div class="ctas" style="margin-top:12px;">
+                        <a class="btn btn-primary"
+                            href="https://colab.research.google.com/drive/1qLrmk7DuZtH63QFlYm7qKkVKj37EhKHR?usp=sharing"
+                            target="_blank" rel="noopener">
+                            <img class="icon" src="https://colab.research.google.com/img/colab_favicon_256px.png"
+                                alt="Colab" />
+                            Open in Colab
+                        </a>
+                        <a class="btn btn-primary"
+                            href="https://github.com/self-improving-efms/self-improving-efms.github.io/blob/main/pointmass_notebook.ipynb"
+                            target="_blank" rel="noopener">
+                            <img class="icon"
+                                src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                                alt="GitHub" />
+                            View on GitHub
+                        </a>
+                    </div>
+                    <div class="grid grid-2" style="margin-top:12px;">
+                        <div class="card">
+                            <div class="blue-title">Stage 1 SFT Policy</div>
+                            <video src="/assets/pointmass_stage1.mp4" controls playsinline
+                                style="width:100%; border-radius:8px;"></video>
+                        </div>
+                        <div class="card">
+                            <div class="blue-title">Stage 2 Self-Improvement Policy</div>
+                            <video src="/assets/pointmass_stage2.mp4" controls playsinline
+                                style="width:100%; border-radius:8px;"></video>
                         </div>
                     </div>
-                    <div>
-                        <p>We use a simple pointmass domain to illustrate how shaping with d accelerates learning and
-                            improves stability. Ablations show the role of web-scale pretraining and steps-to-go
-                            signals.</p>
-                        <div class="figure">
-                            <div class="img-placeholder">Placeholder — learning curves and ablations</div>
-                            <div class="figcaption">Learning curves with/without shaping; pretraining ablations. See <a
-                                    href="https://arxiv.org/pdf/2509.15155" target="_blank" rel="noopener">paper</a>.
-                            </div>
-                        </div>
+                    <div class="figure figure-white" style="margin-top:12px;">
+                        <img src="/assets/ten_pointmass.png" alt="Pointmass Navigation Domain" />
+                        <div class="figcaption"><strong>Pointmass Navigation Domain.</strong> Sample trajectories from
+                            the imitation learning dataset, as well as BC (Stage 1) and Self-Improved (Stage 2)
+                            policies.</div>
                     </div>
                 </div>
             </div>
