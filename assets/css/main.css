@@ -573,6 +573,12 @@ pre {
     margin-bottom: 6px;
 }
 
+/* Strong accent paragraph */
+.accent-strong {
+    color: var(--accent);
+    font-weight: 800;
+}
+
 @media (prefers-color-scheme: light) {
     :root {
         --bg: #ffffff;

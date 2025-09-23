@@ -304,10 +304,31 @@
                 </div>
 
                 <h3>Mathematical intuition</h3>
-                <p>Reward function and success detector from steps-to-go d(o, g):</p>
+                <p>We use the expectation of the model's steps-to-go predictions:</p>
+                <p class="small eq-muted">\[ d(o, g) := \mathbb{E}_{\;p_{\text{steps-to-go}}(\,\text{steps-to-go}\mid o,
+                    g\,)}\big[\,\text{steps-to-go}\,\big] \]</p>
+                <p>To define the reward function as the improvement in steps-to-go:</p>
                 <p class="small eq-muted">\[ r(o_t, a_t, o_{t+1}, g) = d(o_t, g) - d(o_{t+1}, g) \]</p>
-                <p class="small eq-muted">\[ \\mathrm{success}(o, g) = \\mathbb{1}\\,[\\, d(o, g) \\le s \\,] \]</p>
-                <p>This encourages monotonic decrease in d and provides a principled termination condition.</p>
+                <p>This also lets us define success detection via thresholding steps-to-go predictions:</p>
+                <p class="small eq-muted">\[ \mathrm{success}(o, g) = \mathbb{1}\,[\, d(o, g) \le s \,] \]</p>
+                <p>Letting \( \mu \) be the policy corresponding to the imitation dataset (e.g., human dataset), we can
+                    define the value function of \( \mu \) as follows:</p>
+                <p class="small eq-muted">\[ V^{\mu}(o_t, g) = \mathbb{E}_{\mu}\Big[ \sum_{i=t}^{T} -\,
+                    \mathbb{1}\big[\, o_i\ \text{satisfies}\ g \,\big] \Big] = \mathbb{E}_{\mu}\big[ -\,
+                    \text{steps-to-go} \big] =: -\, d(o_t, g) \]</p>
+                <p>This enables us to decompose our proposed reward function:</p>
+                <p class="small eq-muted">\[ r(o_t, a_t, o_{t+1}, g) = V^{\mu}(o_{t+1}, g) - V^{\mu}(o_t, g) =
+                    \underbrace{(1 - \gamma)\, V^{\mu}(o_{t+1}, g)}_{\text{core reward}} \;+\; \underbrace{\left[
+                    \gamma\, V^{\mu}(o_{t+1}, g) - V^{\mu}(o_t, g) \right]}_{\text{reward shaping}} \]</p>
+                <p class="accent-strong">Self-Improvement leads to policies that achieve intended goals more efficiently
+                    than the dataset policy \( \mu \), while being implicitly regularized to stay close to regions of
+                    the state space where \( \mu \) is proficient.</p>
+                <p>Simplifying the Monte Carlo returns we observe a built-in baseline subtraction:</p>
+                <p class="small eq-muted">\[ R_t = \sum_{i=t}^{T} \gamma^{\, i-t}\; r(o_i, a_i, o_{i+1}, g) \;=\;
+                    \Big[\, (1-\gamma)\, \sum_{i=t}^{T} \gamma^{\, i-t}\; V^{\mu}(o_{i+1}, g) \,\Big] \; - \;
+                    \underbrace{V^{\mu}(o_t, g)}_{\text{baseline}} \]</p>
+                <p class="accent-strong">The built-in baseline subtraction leads to lower variance estimates, enabling
+                    use to use REINFORCE for policy improvement.</p>
 
                 <h3>Pointmass experiments</h3>
                 <div class="grid grid-2">
