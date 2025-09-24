@@ -24,37 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Video modal
-    var modal = document.getElementById('videoModal');
-    var modalClose = document.getElementById('modalClose');
-    var modalFrame = document.getElementById('modalFrame');
-    function openModal(src) {
-        if (!modal) return;
-        modal.classList.add('open');
-        if (modalFrame) modalFrame.src = src;
-    }
-    function closeModal() {
-        if (!modal) return;
-        modal.classList.remove('open');
-        if (modalFrame) modalFrame.src = '';
-    }
-    if (modal) {
-        modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-    }
-    if (modalClose) {
-        modalClose.addEventListener('click', closeModal);
-    }
-    document.querySelectorAll('.video-tile').forEach(function (tile) {
-        tile.addEventListener('click', function () {
-            var src = this.getAttribute('data-video');
-            if (src && src !== '#') {
-                openModal(src);
-            } else {
-                var link = this.getAttribute('data-link');
-                if (link) window.open(link, '_blank', 'noopener');
-            }
-        });
-    });
+    // (videos section removed)
 
     // Copy BibTeX
     var copyBtn = document.getElementById('copyBibtex');
