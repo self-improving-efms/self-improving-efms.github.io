@@ -15,6 +15,7 @@
 
 html {
     scroll-behavior: smooth;
+    color-scheme: dark;
 }
 
 body {
@@ -191,6 +192,20 @@ hr {
     max-width: 860px;
 }
 
+/* Ensure hero bullet list matches hero paragraph font/color */
+.hero ul {
+    margin: 8px 0 0 0;
+    padding-left: 0;
+    list-style: disc;
+    list-style-position: inside;
+    color: #cfd7e6;
+}
+
+.hero ul li {
+    font-size: 20px;
+    color: #cfd7e6;
+}
+
 .ctas {
     display: flex;
     gap: 12px;
@@ -320,6 +335,44 @@ hr {
 
 .metric span {
     color: var(--accent);
+}
+
+/* Metric pair with underbrace-like labels */
+.metric-pair {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 16px;
+}
+
+.metric-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.metric-arrow {
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1;
+    padding: 0 4px 10px 4px;
+}
+
+.underbrace-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+}
+
+.underbrace-label .brace-left,
+.underbrace-label .brace-right {
+    color: var(--muted);
+}
+
+.underbrace-label .label-text {
+    white-space: normal;
 }
 
 /* Videos */
@@ -588,32 +641,10 @@ pre {
     font-weight: 800;
 }
 
-@media (prefers-color-scheme: light) {
-    :root {
-        --bg: #ffffff;
-        --panel: #ffffff;
-        --text: #0b0d12;
-        --muted: #4b5563;
-        --accent: #0ea5e9;
-        --accent-contrast: #e0f2fe;
-        --border: #e5e7eb;
-    }
-
-    body {
-        background: #ffffff;
-    }
-
-    .hero h1 {
-        background: none;
-        color: #0b0d12;
-    }
-
-    .takeaway {
-        background: #ecfdf5;
-        border-color: #a7f3d0;
-    }
-
-    .takeaway .label {
-        color: #065f46;
-    }
+/* Equalize height for KR4 charts without affecting other images */
+.takeaway .figure img[alt="Ablation: unimodal vs multimodal"],
+.takeaway .figure img[alt="Real2Sim performance plot"] {
+    height: 280px;
+    width: 100%;
+    object-fit: contain;
 }

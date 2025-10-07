@@ -66,14 +66,14 @@
         <section class="hero" id="home">
             <div class="container">
                 <h1>Self-Improving Embodied Foundation Models</h1>
-                <p>Two-stage post-training for robotics: Supervised Fine-Tuning (behavioral cloning + steps-to-go
-                    prediction) followed by Self-Improvement via online RL with shaped rewards and robust success
-                    detection.</p>
+                <p>Appearing at NeurIPS 2025: Two-stage post-training for Embodied Foundation Models (EFMs)</p>
+                <ul>
+                    <li>Stage 1) Supervised Fine-Tuning (behavioral cloning + steps-to-go prediction)</li>
+                    <li>Stage 2) Self-Improvement via online RL with self-predicted rewards and success detection</li>
+                </ul>
                 <div class="ctas">
-                    <a class="btn btn-primary" href="https://arxiv.org/pdf/2509.15155" target="_blank"
-                        rel="noopener">Read the Paper</a>
-                    <a class="btn btn-secondary" href="https://sites.google.com/view/mfa-self-improvement/home"
-                        target="_blank" rel="noopener">Supplementary</a>
+                    <a class="btn btn-primary" href="https://arxiv.org/abs/2509.15155" target="_blank"
+                        rel="noopener">arXiv</a>
                 </div>
                 <div class="hero-figure figure">
                     <img src="/assets/final_arxiv_method_figure.png"
@@ -111,43 +111,57 @@
                 <div class="kicker">Overview</div>
                 <h2 id="method">Method — Two-stage post-training</h2>
                 <div class="grid grid-2">
-                    <div>
-                        <h3>Stage 1 — Supervised Fine-Tuning (SFT)</h3>
-                        <p class="justify">Fine-tune an Embodied Foundation Model (EFM) initialized from a web-scale
-                            pretrained
-                            multimodal foundation model with two objectives:</p>
-                        <p class="small eq-muted"><strong>Behavioral Cloning (BC) loss.</strong>
-                            \[\mathcal{L}_{\mathrm{BC}}(\mathrm{EFM})\;=\;
-                            -\,\mathbb{E}_{(o_t,a_t,g_{t'})\sim\mathcal{D}}\,\Big[\,\log
-                            p^{\mathrm{EFM}}_{\mathrm{action}}(a_t\mid o_t, g_{t'})\,\Big]\]
-                        </p>
-                        <p class="small eq-muted"><strong>Steps-to-go loss.</strong>
-                            \[\mathcal{L}_{\mathrm{steps\text{-}to\text{-}go}}(\mathrm{EFM})\;=\;
-                            -\,\mathbb{E}_{(o_t,a_t,g_{t'})\sim\mathcal{D}}\,\Big[\,\log
-                            p^{\mathrm{EFM}}_{\mathrm{steps\text{-}to\text{-}go}}(\,t' - t\mid o_t, g_{t'}\,)\,\Big]\]
-                        </p>
+                    <div style="display: flex; flex-direction: column;">
+                        <div>
+                            <h3>Stage 1 — Supervised Fine-Tuning (SFT)</h3>
+                            <p class="justify">Fine-tune an Embodied Foundation Model (EFM) initialized from a web-scale
+                                pretrained
+                                multimodal foundation model with two objectives:</p>
+                            <p class="small eq-muted"><strong>Behavioral Cloning (BC) loss.</strong>
+                                \[\mathcal{L}_{\mathrm{BC}}(\mathrm{EFM})\;=\;
+                                -\,\mathbb{E}_{(o_t,a_t,g_{t'})\sim\mathcal{D}}\,\Big[\,\log
+                                p^{\mathrm{EFM}}_{\mathrm{action}}(a_t\mid o_t, g_{t'})\,\Big]\]
+                            </p>
+                            <p class="small eq-muted"><strong>Steps-to-go loss.</strong>
+                                \[\mathcal{L}_{\mathrm{steps\text{-}to\text{-}go}}(\mathrm{EFM})\;=\;
+                                -\,\mathbb{E}_{(o_t,a_t,g_{t'})\sim\mathcal{D}}\,\Big[\,\log
+                                p^{\mathrm{EFM}}_{\mathrm{steps\text{-}to\text{-}go}}(\,t' - t\mid o_t,
+                                g_{t'}\,)\,\Big]\]
+                            </p>
+                        </div>
+                        <div style="margin-top:auto; padding-top:16px;">
+                            <video src="/assets/pointmass_stage1.mp4" autoplay loop muted playsinline
+                                style="width:100%; border-radius:8px;"></video>
+                        </div>
                     </div>
-                    <div>
-                        <h3>Stage 2 — Self-Improvement (Online RL)</h3>
-                        <p class="justify">Self-predicted rewards and success detector enable robots to autonomously
-                            practice downstream tasks and improve online with minimal supervision.</p>
-                        <p class="small eq-muted">
-                            \[
-                            d(o,g)\;:=\;\mathbb{E}_{\;p^{\mathrm{EFM}}_{\mathrm{steps\text{-}to\text{-}go}}(\,\text{steps-to-go}\mid
-                            o,g\,)}\big[\,\text{steps-to-go}\,\big] \]
-                        </p>
-                        <p class="small eq-muted"><strong>Reward function.</strong> \[ r(o_t, a_t, o_{t+1}, g) = d(o_t,
-                            g) -
-                            d(o_{t+1}, g) \]</p>
-                        <p class="small eq-muted"><strong>Success detector.</strong> \[ \mathrm{success}(o, g) =
-                            \mathbb{1}[\,
-                            d(o, g) \le s \,] \]</p>
+                    <div style="display: flex; flex-direction: column;">
+                        <div>
+                            <h3>Stage 2 — Self-Improvement (Online RL)</h3>
+                            <p class="justify">Self-predicted rewards and success detector enable robots to autonomously
+                                practice downstream tasks and improve online with minimal supervision.</p>
+                            <p class="small eq-muted">
+                                \[
+                                d(o,g)\;:=\;\mathbb{E}_{\;p^{\mathrm{EFM}}_{\mathrm{steps\text{-}to\text{-}go}}(\,\text{steps-to-go}\mid
+                                o,g\,)}\big[\,\text{steps-to-go}\,\big] \]
+                            </p>
+                            <p class="small eq-muted"><strong>Reward function.</strong> \[ r(o_t, a_t, o_{t+1}, g) =
+                                d(o_t,
+                                g) -
+                                d(o_{t+1}, g) \]</p>
+                            <p class="small eq-muted"><strong>Success detector.</strong> \[ \mathrm{success}(o, g) =
+                                \mathbb{1}[\,
+                                d(o, g) \le s \,] \]</p>
+                        </div>
+                        <div style="margin-top:auto; padding-top:16px;">
+                            <video src="/assets/pointmass_stage2.mp4" autoplay loop muted playsinline
+                                style="width:100%; border-radius:8px;"></video>
+                        </div>
                     </div>
                 </div>
                 <p class="small">This eliminates manual reward engineering and, combined with web-scale pretraining,
                     enables <strong>behavioral generalization</strong> beyond imitation data.</p>
 
-                <h2 id="results" style="margin-top:28px;">Key results</h2>
+                <h2 id="results" style="margin-top:28px;">Key Results</h2>
                 <div class="figure figure-white">
                     <img src="/assets/stage_2_delta.png" alt="Self-Improvement Stage 2 delta overview" />
                     <div class="figcaption">Stage 2 Self-Improvement deltas.</div>
@@ -156,18 +170,22 @@
                 <div class="takeaways">
                     <div class="takeaway">
                         <p><span class="label">KR1</span> Self-Improvement significantly improves policy performance
-                            beyond the supervised learning stage.</p>
-                        <p style="margin-top:6px;"><span class="label">KR2</span> The combination of supervised learning
-                            + Self-Improvement is much more sample-efficient than supervised learning alone.</p>
+                            beyond Supervised Fine-Tuning (SFT), and the combination of SFT + Self-Improvement is much
+                            more sample-efficient than supervised learning alone.</p>
+                        <p>In the Simulated LanguageTable domain, starting from a behavioral cloning policy with a
+                            success rate
+                            of 45%, we observe:</p>
                         <div class="compare-row">
                             <div class="card" style="flex:1;">
-                                <div class="compare-title si">Online Self-Improvement w/ 10% additional episodes</div>
+                                <div class="compare-title si">Collecting 10% additional episodes during Online
+                                    Self-Improvement (Active RL)</div>
                                 <div class="metric"><span>45% → 75%</span></div>
-                                <div class="small">Simulated LanguageTable</div>
                             </div>
                             <div class="vs-box">vs.</div>
                             <div class="card" style="flex:1;">
-                                <div class="compare-title bc">Supervised Fine-Tuning w/ 8x imitation data</div>
+                                <div class="compare-title bc">Collecting 8x Imitation Learning Data for Supervised
+                                    Fine-Tuning
+                                    (Passive Behavioral Cloning)</div>
                                 <div class="metric"><span>45% → 60%</span></div>
                                 <div class="small"></div>
                             </div>
@@ -177,20 +195,25 @@
 
                 <div class="takeaways" style="margin-top:16px;">
                     <div class="takeaway">
-                        <p><span class="label">KR3</span> Self-Improvement is robust and effective for real-world robot
+                        <p><span class="label">KR2</span> Self-Improvement is robust and effective for real-world robot
                             learning.</p>
+                        <p>In the Real-World LanguageTable domain, starting from a behavioral cloning policy with a
+                            success rate
+                            of 63%, we observe:</p>
                         <div class="compare-row">
                             <div class="card" style="flex:1;">
-                                <div class="compare-title si">Online Self-Improvement w/ 15% additional episodes</div>
+                                <div class="compare-title si">Collecting 15% additional episodes during Online
+                                    Self-Improvement (Active RL)</div>
                                 <div class="metric"><span>63% → 87.5%</span></div>
-                                <div class="small">Real-World LanguageTable</div>
                                 <iframe src="https://drive.google.com/file/d/115Jz-bTBlE5a0ulmo6t2ZP9tsQ3PK4Qs/preview"
                                     allow="autoplay" allowfullscreen
                                     style="width:100%; aspect-ratio:16/9; border:0; border-radius:8px; margin-top:8px;"></iframe>
                             </div>
                             <div class="vs-box">vs.</div>
                             <div class="card" style="flex:1;">
-                                <div class="compare-title bc">Supervised Fine-Tuning w/ 4x imitation data</div>
+                                <div class="compare-title bc">Collecting 4x Imitation Learning Data for Supervised
+                                    Fine-Tuning
+                                    (Passive Behavioral Cloning)</div>
                                 <div class="metric"><span>63% → 62%</span></div>
                                 <div class="small"></div>
                                 <iframe src="https://drive.google.com/file/d/15I2kLxC-ZeGPvP8N8WO3Xwd8E1qL9q1e/preview"
@@ -203,33 +226,35 @@
 
                 <div class="takeaways" style="margin-top:16px;">
                     <div class="takeaway">
-                        <p><span class="label">KR4</span> Online Self-Improvement + web-scale pretraining enables
+                        <p><span class="label">KR3</span> Online Self-Improvement + web-scale pretraining enables
                             policies to rapidly acquire new skills that generalize far beyond imitation datasets.</p>
                         <div class="grid grid-2" style="margin-top:12px;">
                             <div class="card">
                                 <div class="blue-title">Real2Sim</div>
-                                <p class="small muted" style="margin-top:6px;">Generalization across embodiment/domain
-                                    with self-practice.</p>
+                                <p class="small muted" style="margin-top:6px;">Generalization across simulation and
+                                    real-world with Self-Improvement.</p>
                                 <div class="figure figure-white" style="margin-top:8px;">
-                                    <img src="/assets/real2sim.001.png" alt="Real2Sim environments" />
+                                    <img src="/assets/real_to_sim.png" alt="Real2Sim environments" />
                                     <div class="figcaption">Real2Sim evaluation environments.</div>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="blue-title">Strong Generalisation</div>
-                                <p class="small muted" style="margin-top:6px;">Acquiring OOD skills beyond imitation
+                                <p class="small muted" style="margin-top:6px;">Acquiring novel skills beyond the
+                                    imitation
                                     datasets.</p>
                                 <div class="figure figure-white" style="margin-top:8px;">
-                                    <img src="/assets/bananatable_envs/bananatable_envs.001.png"
-                                        alt="BananaTable environments" />
-                                    <div class="figcaption">Strong Generalisation: BananaTable environments.</div>
+                                    <img src="/assets/lang_to_banana.png" alt="BananaTable environments" />
+                                    <div class="figcaption">Strong Generalisation: LanguageTable → BananaTable.</div>
                                 </div>
                             </div>
                         </div>
                         <div style="margin-top:10px;">
                             <div class="blue-title">Strong Generalization — BananaTable</div>
-                            <p class="small" style="margin:6px 0 12px 0;">The model has only seen the LanguageTable
-                                imitation dataset, and never seen a banana nor LanguageTable without the blocks. With 8
+                            <p class="small" style="margin:6px 0 12px 0;">We start from a policy and reward model that
+                                has only seen the
+                                LanguageTable dataset, and never seen a banana nor LanguageTable without the blocks.
+                                After 8
                                 hours of Self-Improvement, the model rapidly aquires the novel challenging skill of
                                 effectively moving the banana around the table.</p>
                             <div class="grid grid-2">
@@ -256,26 +281,30 @@
 
                 <div class="takeaways" style="margin-top:16px;">
                     <div class="takeaway">
-                        <p><span class="label">KR5</span> Multimodal pretraining is a key enabler of sample-efficiency
+                        <p><span class="label">KR4</span> Multimodal pretraining is a key enabler of sample-efficiency
                             and stronger Self-Improved policies.</p>
-                        <p class="small" style="margin-top:12px;">We evaluate alternative reward-model variants; results
-                            demonstrate the significant value of web-scale multimodal pretraining.</p>
+                        <p class="small" style="margin-top:12px;">We ablate alternative reward-model variants. Our
+                            results
+                            demonstrate the significant value of web-scale multimodal pretraining, in particular on
+                            smaller dataset sizes.</p>
                         <ul class="small" style="margin-top:6px; padding-left: 18px;">
                             <li><strong>PaLI / PaLI-X</strong>: pretrained multimodal foundation models (<a
                                     href="https://arxiv.org/abs/2305.18565" target="_blank" rel="noopener">arXiv</a>).
                             </li>
                             <li><strong>Uni-PaLI</strong>: vision and language components trained unimodally,
-                                separately.</li>
+                                without joint training.</li>
                             <li><strong>Scratch</strong>: no pretraining, same architecture.</li>
                         </ul>
                         <div class="grid grid-2" style="margin-top:12px;">
                             <div class="figure figure-white"><img src="/assets/ablation_unipali.png"
                                     alt="Ablation: unimodal vs multimodal" />
-                                <div class="figcaption">Ablation: effect of multimodal pretraining.</div>
+                                <div class="figcaption">Effect of multimodal pretraining of reward model on Simulated
+                                    LanguageTable.</div>
                             </div>
                             <div class="figure figure-white"><img src="/assets/real2sim_plot.png"
                                     alt="Real2Sim performance plot" />
-                                <div class="figcaption">Real2Sim performance.</div>
+                                <div class="figcaption">Effect of multimodal pretraining of reward model on Real2Sim
+                                    transfer.</div>
                             </div>
                         </div>
                     </div>
@@ -286,9 +315,10 @@
         <section id="intuition">
             <div class="container">
                 <div class="kicker">Intuition</div>
-                <h2>Visual, Mathematical, and Pointmass Intuition</h2>
+                <h2>Visual Intuition</h2>
+                <!-- <h2>Visual, Mathematical, and Pointmass Intuition</h2> -->
 
-                <h3>Visual intuition</h3>
+                <!-- <h3>Visual intuition</h3> -->
                 <div class="callout justify" style="margin-bottom:12px;">
                     We formulate steps-to-go prediction as a <strong>discrete prediction</strong> task. The first two
                     figures visualize the model's predicted distribution over steps-to-go at interesting
@@ -387,7 +417,8 @@
                     </div>
                 </div>
 
-                <h3>Mathematical intuition</h3>
+                <div class="kicker">Intuition</div>
+                <h2>Mathematical Intuition</h2>
                 <p>We use the expectation of the model's steps-to-go predictions:</p>
                 <p class="small eq-muted">\[ d(o, g) := \mathbb{E}_{\;p_{\text{steps-to-go}}(\,\text{steps-to-go}\mid o,
                     g\,)}\big[\,\text{steps-to-go}\,\big] \]</p>
@@ -414,7 +445,8 @@
                 <p class="accent-strong">The built-in baseline subtraction leads to lower variance estimates, enabling
                     use to use REINFORCE for policy improvement.</p>
 
-                <h3>Pointmass experiments</h3>
+                <div class="kicker">Intuition</div>
+                <h2>PointMass Domain</h2>
                 <div>
                     <p>
                         We provide a self-contained Colab notebook that demonstrates Self-Improvement on a pointmass
@@ -448,12 +480,12 @@
                     <div class="grid grid-2" style="margin-top:12px;">
                         <div class="card">
                             <div class="blue-title">Stage 1 SFT Policy</div>
-                            <video src="/assets/pointmass_stage1.mp4" controls playsinline
+                            <video src="/assets/pointmass_stage1.mp4" autoplay loop muted playsinline
                                 style="width:100%; border-radius:8px;"></video>
                         </div>
                         <div class="card">
                             <div class="blue-title">Stage 2 Self-Improvement Policy</div>
-                            <video src="/assets/pointmass_stage2.mp4" controls playsinline
+                            <video src="/assets/pointmass_stage2.mp4" autoplay loop muted playsinline
                                 style="width:100%; border-radius:8px;"></video>
                         </div>
                     </div>
